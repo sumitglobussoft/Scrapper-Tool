@@ -5,17 +5,41 @@
  */
 package scrappertool.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import org.jdesktop.swingx.JXDatePicker;
+import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import scrappertool.calender.ExclusionDateRange;
+import scrappertool.calender.JCalendarDialog;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import scrappertool.crawlers.DeleteDBStartCrawl;
+import scrappertool.dao.LaunchDataDao;
+import scrappertool.dao.LaunchDataDaoImpl;
+import scrappertool.entity.LaunchData;
+import scrappertool.entity.ProxyImport;
 
 /**
  *
  * @author GLB-130
  */
 public class MainPage extends javax.swing.JFrame {
+
+    ApplicationContext context
+            = new ClassPathXmlApplicationContext("Beans.xml");
+
+    LaunchDataDao objLaunchDataDao
+            = (LaunchDataDaoImpl) context.getBean("LaunchDataDaoImpl");
 
     /**
      * Creates new form MainPage
@@ -34,89 +58,124 @@ public class MainPage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         refreshDB = new javax.swing.JButton();
-        showData = new javax.swing.JButton();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
-        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        loggerArea = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
+        proxyButton = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        calendarButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        refreshDB.setBackground(new java.awt.Color(51, 153, 255));
-        refreshDB.setText("Refresh Database");
+        refreshDB.setBackground(new java.awt.Color(0, 153, 255));
+        refreshDB.setText("REFRESH DATA");
         refreshDB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 refreshDBActionPerformed(evt);
             }
         });
 
-        showData.setBackground(new java.awt.Color(0, 153, 255));
-        showData.setText("Show Data");
-        showData.addActionListener(new java.awt.event.ActionListener() {
+        loggerArea.setColumns(20);
+        loggerArea.setFont(new java.awt.Font("Consolas", 1, 12)); // NOI18N
+        loggerArea.setRows(5);
+        jScrollPane1.setViewportView(loggerArea);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("SCRAPPER TOOL");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        proxyButton.setBackground(new java.awt.Color(0, 153, 255));
+        proxyButton.setText("LOAD PROXY");
+        proxyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showDataActionPerformed(evt);
+                proxyButtonActionPerformed(evt);
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextField1.setEnabled(false);
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("SCRAPPER TOOL");
+        calendarButton.setBackground(new java.awt.Color(0, 153, 255));
+        calendarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/scrappertool/images/calendar.png"))); // NOI18N
+        calendarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calendarButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jLabel2.setText("Select Launch Date:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Logger:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
+                        .addContainerGap()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(265, 265, 265)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(276, 276, 276))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)
-                                .addComponent(showData, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(refreshDB)
-                                .addGap(35, 35, 35))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(87, 87, 87)
-                                .addComponent(jLabel1)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(22, Short.MAX_VALUE))))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(calendarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(refreshDB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(proxyButton, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(refreshDB, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showData, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+                    .addComponent(refreshDB, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(proxyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(calendarButton)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(28, 28, 28)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                .addGap(37, 37, 37))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,11 +187,105 @@ public class MainPage extends javax.swing.JFrame {
 
     private void refreshDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshDBActionPerformed
         // TODO add your handling code here:
+
+        if (proxyList.size() > 0) {
+
+            loggerArea.append("\nPlease Wait!!");
+            proxyButton.setEnabled(false);
+           calendarButton.setEnabled(false);
+            ExecutorService executor = Executors.newFixedThreadPool(1);
+            Callable worker = new DeleteDBStartCrawl(objLaunchDataDao, proxyList);
+
+            try {
+                executor.submit(worker);
+            } catch (Exception ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            loggerArea.append("\nPlease Load Proxy!!");
+        }
     }//GEN-LAST:event_refreshDBActionPerformed
 
-    private void showDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDataActionPerformed
+    private void proxyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proxyButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_showDataActionPerformed
+
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        proxyButton.setForeground(Color.BLACK);
+        final JFileChooser fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(this);
+        FileSystemView a = fc.getFileSystemView();
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Selected file: " + file.getAbsolutePath());
+
+            //file.canRead();
+            System.out.println(fc.getFileSystemView());
+
+            try {
+                // What to do with the file, e.g. display it in a TextArea
+                FileReader fileReader = new FileReader(file.getAbsolutePath());
+
+                BufferedReader br = new BufferedReader(fileReader);
+
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    System.out.println(line);
+                    proxyList.add(new ProxyImport(line));
+                    countOfProxy++;
+
+                }
+
+                loggerArea.append("\nDone Loading the Proxy!!");
+                System.out.println(file.getAbsolutePath());
+
+            } catch (Exception e) {
+                //System.out.println("problem accessing file"+file.getAbsolutePath());
+            }
+        } else {
+            //log.append("Open command cancelled by user." + newline);
+        }
+    }//GEN-LAST:event_proxyButtonActionPerformed
+
+    private void calendarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calendarButtonActionPerformed
+        // TODO add your handling code here:
+        JCalendarDialog dialog = new JCalendarDialog(this, objLaunchDataDao);
+//        dialog.addExclusionDateRange(new ExclusionDateRange("M/d/yy",
+//                "2/16/15", "2/16/15"));
+        dialog.setDialogTitle("Launch Date");
+//            dialog.setExclusionDaysOfWeek(Calendar.SATURDAY, Calendar.SUNDAY);
+        dialog.setLocale(Locale.ENGLISH);
+        dialog.createDialog();
+        if (dialog.getReturnCode() == JCalendarDialog.OK_PRESSED) {
+            jTextField1.setText(dialog.getFormattedSelectedDate());
+
+            if (objLaunchDataDao.listLaunchData().size() > 0) {
+                loggerArea.cut();
+                loggerArea.append("\nDetails for: "+dialog.getFormattedSelectedDate());
+                List<LaunchData> selectedLaunchData = objLaunchDataDao.listLaunchData(dialog.getSelectedDate().getTime());
+                loggerArea.append("\n Total Launches on The Day::"+selectedLaunchData.size());
+                for (LaunchData selectedLaunchData1 : selectedLaunchData) {
+                    loggerArea.append("\n1.Product           ----------> : " + selectedLaunchData1.getProduct().trim());
+                    loggerArea.append("\n2.Vendor            ----------> : " + selectedLaunchData1.getVendor().trim());
+                    loggerArea.append("\n3.LaunchDate        ----------> : " + selectedLaunchData1.getLaunchDate());
+                    loggerArea.append("\n4.Niche             ----------> : " + selectedLaunchData1.getNiche().trim());
+                    loggerArea.append("\n5.AffiliateNetwork  ----------> : " + selectedLaunchData1.getAffiliateNetwork().trim());
+                    loggerArea.append("\n6.Description       ----------> : " + selectedLaunchData1.getDescription().trim());
+                    loggerArea.append("\n7.PromotionType     ----------> : " + selectedLaunchData1.getPromotionType().trim());
+                    loggerArea.append("\n");
+                }
+                loggerArea.append("\n");
+            } else {
+                loggerArea.append("\nDatabase Is Empty. Please Refresh The Data");
+            }
+        }
+    }//GEN-LAST:event_calendarButtonActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,15 +321,18 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
     }
-
+    public static ArrayList<ProxyImport> proxyList = new ArrayList();
+    public int countOfProxy = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JButton calendarButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
+    private javax.swing.JTextField jTextField1;
+    public static javax.swing.JTextArea loggerArea;
+    public static javax.swing.JButton proxyButton;
     private javax.swing.JButton refreshDB;
-    private javax.swing.JButton showData;
     // End of variables declaration//GEN-END:variables
 }

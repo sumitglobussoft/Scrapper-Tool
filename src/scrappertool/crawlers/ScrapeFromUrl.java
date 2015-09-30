@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package scrappertool;
+package scrappertool.crawlers;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -25,6 +25,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import scrappertool.dao.LaunchDataDao;
 import scrappertool.entity.LaunchData;
+import scrappertool.entity.ProxyImport;
+import static scrappertool.ui.MainPage.loggerArea;
 import scrappertool.utility.FetchSource;
 
 /**
@@ -36,16 +38,16 @@ public class ScrapeFromUrl {
     FetchSource objFetchSource = new FetchSource();
     List<String> getMuncheyeLaunchURL = new ArrayList<>();
 
-    public void dataScrapping(LaunchDataDao objLaunchDataDao) {
+    public void dataScrapping(LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
 
         String urlMuncheye = "http://muncheye.com/";
         String urlJvnotifypro = "http://v3.jvnotifypro.com/account/";
         String urlLaunchsuite = "http://www.launchsuite.net/";
         try {
 
-//            getMuncheyeLaunch(urlMuncheye, objLaunchDataDao);
-//            getJvnotifyproLaunch(urlJvnotifypro, objLaunchDataDao);
-            getLaunchsuiteLaunch(urlLaunchsuite, objLaunchDataDao);
+            getMuncheyeLaunch(urlMuncheye, objLaunchDataDao, proxyList);
+            getJvnotifyproLaunch(urlJvnotifypro, objLaunchDataDao, proxyList);
+            getLaunchsuiteLaunch(urlLaunchsuite, objLaunchDataDao, proxyList);
 
         } catch (Exception ex) {
             Logger.getLogger(ScrapeFromUrl.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,14 +55,14 @@ public class ScrapeFromUrl {
 
     }
 
-    public void getMuncheyeLaunch(String urlPage, LaunchDataDao objLaunchDataDao) {
+    public void getMuncheyeLaunch(String urlPage, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
         System.out.println("========Getting  Launch List From Muncheye========");
 
         String urlResponse = null;
         Document objDocument = null;
         try {
 
-            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage);
+            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
             objDocument = Jsoup.parse(urlResponse);
 
             Elements e = objDocument.select("div[id=right-column] div[class=item_info] a");
@@ -73,7 +75,7 @@ public class ScrapeFromUrl {
             ExecutorService executor = Executors.newFixedThreadPool(10);
             for (String url : getMuncheyeLaunchURL) {
                 try {
-                    Callable worker = new MuncheyeThread(url, objLaunchDataDao);
+                    Callable worker = new MuncheyeThread(url, objLaunchDataDao, proxyList);
                     Future<String> future = executor.submit(worker);
                     list.add(future);
                 } catch (Exception exx) {
@@ -99,8 +101,8 @@ public class ScrapeFromUrl {
 
     }
 
-    public void getJvnotifyproLaunch(String urlPage, LaunchDataDao objLaunchDataDao) {
-        
+    public void getJvnotifyproLaunch(String urlPage, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
+
         List<LaunchData> listLaunchData = new ArrayList();
         LaunchData objLaunchData = null;
 
@@ -127,7 +129,7 @@ public class ScrapeFromUrl {
             String ticket = "NA";
             String clicks = "NA";
 
-            urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
             objDocument = Jsoup.parse(urlResponse);
 //            System.out.println(""+objDocument);
 
@@ -188,118 +190,162 @@ public class ScrapeFromUrl {
                     System.out.println("description::" + description);
                 } catch (Exception vp) {
                 }
-                
+
                 try {
-                    ticket = e1.select("span").get(0).text()+ "==>" + e1.select("span").get(1).text();
-                    
+                    ticket = e1.select("span").get(0).text() + "==>" + e1.select("span").get(1).text();
+
                     System.out.println("tempTicket::" + ticket);
-                    
+
                 } catch (Exception c) {
                 }
-                
+
                 try {
-                    clicks = e1.select("span").get(2).text()+ "/" + e1.select("span").get(3).text();
-                    
+                    clicks = e1.select("span").get(2).text() + "/" + e1.select("span").get(3).text();
+
                     System.out.println("clicks::" + clicks);
-                    
+
                 } catch (Exception c) {
                 }
-                
-                
+
                 try {
                     String tbody = e1.select("tbody").text();
                     System.out.println("tbody::" + tbody);
                     try {
-                        String tempLaunch[]=tbody.split("Launch");
-                        promotionType=tempLaunch[0]+"Launch";
+                        String tempLaunch[] = tbody.split("Launch");
+                        promotionType = tempLaunch[0] + "Launch";
                         System.out.println("promotionType::" + promotionType);
-                        
-                        String tempMarkSoftProc[]=tempLaunch[1].split(" ");
-                        
-                        affiliateNetwork=tempMarkSoftProc[1];
+
+                        String tempMarkSoftProc[] = tempLaunch[1].split(" ");
+
+                        affiliateNetwork = tempMarkSoftProc[1];
                         System.out.println("affiliateNetwork::" + affiliateNetwork);
-                        
-                        
+
                     } catch (Exception l) {
                     }
                     try {
-                        String temp1Niche[]=tbody.split("[)]");
-                        String temp2Niche[]=temp1Niche[1].split("[(]");
-                        niche=temp2Niche[0];
+                        String temp1Niche[] = tbody.split("[)]");
+                        String temp2Niche[] = temp1Niche[1].split("[(]");
+                        niche = temp2Niche[0];
                         System.out.println("niche::" + niche);
-                        
+
                     } catch (Exception l) {
                         l.printStackTrace();
                     }
-                    
+
                 } catch (Exception vp) {
                 }
-                
-           objLaunchData.setPromotionType(promotionType);
-           objLaunchData.setVendor(vendor);
-           objLaunchData.setProduct(product);
-           objLaunchData.setLaunchDate(launchDate);
-           objLaunchData.setLaunchTime(launchTime);
-           objLaunchData.setFrontendPrice(frontEndPrice);
-           objLaunchData.setCommission(commission);
-           objLaunchData.setJvPage(jvPage);
-           objLaunchData.setAffiliateNetwork(affiliateNetwork);
-           objLaunchData.setNiche(niche);
-           objLaunchData.setSite(site);
-           objLaunchData.setPreLaunchDate(preLaunchDate);
-           objLaunchData.setDescription(description);
-           objLaunchData.setTicket(ticket);
-           objLaunchData.setClicks(clicks);
-           listLaunchData.add(objLaunchData);
-}
-            
+
+                objLaunchData.setPromotionType(promotionType);
+                objLaunchData.setVendor(vendor);
+                objLaunchData.setProduct(product);
+                objLaunchData.setLaunchDate(launchDate);
+                objLaunchData.setLaunchTime(launchTime);
+                objLaunchData.setFrontendPrice(frontEndPrice);
+                objLaunchData.setCommission(commission);
+                objLaunchData.setJvPage(jvPage);
+                objLaunchData.setAffiliateNetwork(affiliateNetwork);
+                objLaunchData.setNiche(niche);
+                objLaunchData.setSite(site);
+                objLaunchData.setPreLaunchDate(preLaunchDate);
+                objLaunchData.setDescription(description);
+                objLaunchData.setTicket(ticket);
+                objLaunchData.setClicks(clicks);
+                listLaunchData.add(objLaunchData);
+
+                loggerArea.append("\nProduct           ----------> : " + objLaunchData.getProduct().trim());
+                loggerArea.append("\nVendor            ----------> : " + objLaunchData.getVendor().trim());
+                loggerArea.append("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
+                loggerArea.append("\nNiche             ----------> : " + objLaunchData.getNiche().trim());
+                loggerArea.append("\nAffiliateNetwork  ----------> : " + objLaunchData.getAffiliateNetwork().trim());
+                loggerArea.append("\nDescription       ----------> : " + objLaunchData.getDescription().trim());
+                loggerArea.append("\nPromotionType     ----------> : " + objLaunchData.getPromotionType().trim());
+                loggerArea.append("\n");
+            }
+
             for (LaunchData obj : listLaunchData) {
                 objLaunchDataDao.insertLaunchData(obj);
             }
-            
 
         } catch (Exception ex) {
             Logger.getLogger(ScrapeFromUrl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    public void getLaunchsuiteLaunch(String urlLaunchsuite, LaunchDataDao objLaunchDataDao) {
+
+    public void getLaunchsuiteLaunch(String urlLaunchsuite, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
         System.out.println("========Getting  Launch List From Launchsuite========");
         //"http://www.launchsuite.net/getmelistingdetails.php"
 
         String urlResponse = null;
         Document objDocument = null;
-        List<String> allLaunchsuiteID = new ArrayList<>();
+        List<LaunchIDAN> allLaunchsuiteID = new ArrayList<>();
         try {
 
-            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlLaunchsuite);
+            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlLaunchsuite, proxyList);
             objDocument = Jsoup.parse(urlResponse);
 
             Elements e = objDocument.select("div[class=launches-container] div[class=singelisting full]");
 
             for (Element e1 : e) {
-                String tempId=e1.attr("id");
-                tempId = tempId.replace("launch", "");
-                allLaunchsuiteID.add(tempId);
-                System.out.println(""+tempId);
-            }
-            for (String para : allLaunchsuiteID) {
+                LaunchIDAN obj = new LaunchIDAN();
+                String tempId = e1.attr("id");
+                String aff = null;
                 try {
-                    
-                     new Launchsuite().dataExtraction(para, objLaunchDataDao);
-                   
+                    aff = e1.select("div[class*=affiliatenetwork]").attr("class").replace("Listing affiliatenetwork", "");
+                    if (aff.equals("zoo")) {
+                        obj.setAn("JVZoo");
+                    } else if (aff.equals("wp")) {
+                        obj.setAn("WarriorPlus");
+                    } else {
+                        obj.setAn(aff);
+                    }
+                } catch (Exception an) {
+                }
+                System.out.println("affN::::" + aff);
+
+                tempId = tempId.replace("launch", "");
+                obj.setId(tempId);
+                allLaunchsuiteID.add(obj);
+                System.out.println("" + tempId);
+            }
+            for (LaunchIDAN objLaunchIDAN : allLaunchsuiteID) {
+                try {
+
+                    new Launchsuite().dataExtraction(objLaunchIDAN.getId(), objLaunchIDAN.getAn(), objLaunchDataDao, proxyList);
+
                 } catch (Exception exx) {
                     System.out.println(exx);
                 }
 
             }
 
-
         } catch (Exception ex) {
             Logger.getLogger(ScrapeFromUrl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+}
+
+class LaunchIDAN {
+
+    String id;
+    String an;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAn() {
+        return an;
+    }
+
+    public void setAn(String an) {
+        this.an = an;
     }
 
 }

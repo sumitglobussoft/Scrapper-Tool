@@ -6,8 +6,10 @@
 
 package scrappertool.dao;
 
+import java.util.Date;
 import java.util.List;
 import javax.sql.DataSource;
+import scrappertool.entity.DateCount;
 import scrappertool.entity.LaunchData;
 
 /**
@@ -41,7 +43,7 @@ public interface LaunchDataDao {
     * all the records from the Student table.
      * @return 
     */
-   public List<LaunchData> listStudents();
+   public List<LaunchData> listLaunchData();
    /** 
     * This is the method to be used to delete
     * a record from the Student table corresponding
@@ -59,4 +61,11 @@ public interface LaunchDataDao {
    
    
    public void insertLaunchData(LaunchData objLaunchData);
+   
+   public int deleteAll();
+   
+   public List<LaunchData> listLaunchData(Date selectedDate);
+   
+   public List<DateCount> listLaunchDatas();
+
 }

@@ -5,12 +5,15 @@
  */
 package scrappertool.dao;
 
+import java.util.Date;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import scrappertool.entity.DateCount;
+import scrappertool.entity.DateCountRowMapper;
 import scrappertool.entity.LaunchData;
 
 /**
@@ -47,11 +50,11 @@ public class LaunchDataDaoImpl implements LaunchDataDao {
     }
 
     @Override
-    public List<LaunchData> listStudents() {
-        String SQL = "select * from Student";
-        List<LaunchData> students = jdbcTemplateObject.query(SQL,
+    public List<LaunchData> listLaunchData() {
+        String SQL = "select * from launch_data";
+        List<LaunchData> listLaunchData = jdbcTemplateObject.query(SQL,
                 new BeanPropertyRowMapper(LaunchData.class));
-        return students;
+        return listLaunchData;
     }
 
     @Override
@@ -88,5 +91,27 @@ public class LaunchDataDaoImpl implements LaunchDataDao {
         }
 
     }
-
+    
+    @Override
+    public int deleteAll(){
+       String SQL = "delete from launch_data";
+       int val=jdbcTemplateObject.update(SQL);
+       return val;
+    }
+    
+    @Override
+    public List<LaunchData> listLaunchData(Date selectedDate){
+        String SQL = "select * from launch_data where LAUNCH_DATE = ?";
+        List<LaunchData> listLaunchData = jdbcTemplateObject.query(SQL, new Object[]{selectedDate},
+                new BeanPropertyRowMapper(LaunchData.class));
+        return listLaunchData;
+    }
+    
+    
+    @Override
+    public List<DateCount> listLaunchDatas(){
+        String SQL = "SELECT count( * ) , `LAUNCH_DATE` FROM `launch_data` GROUP BY `LAUNCH_DATE` ORDER BY count( * ) DESC";
+        List<DateCount> listDateCount = jdbcTemplateObject.query(SQL,new DateCountRowMapper());
+        return listDateCount;
+    }
 }

@@ -9,14 +9,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +31,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import scrappertool.entity.ProxyImport;
 
 /**
  *
@@ -46,25 +39,20 @@ import org.apache.http.util.EntityUtils;
  */
 public class FetchSource {
 
-    public String fetchPageSourceWithProxy(String newurl) throws IOException, InterruptedException {
+    public String fetchPageSourceWithProxy(String newurl, List<ProxyImport> proxyList) throws IOException, InterruptedException {
 
-        BufferedReader reader = new BufferedReader(new FileReader("proxy.txt"));
-        String line = reader.readLine();
-        List<String> lines = new ArrayList<String>();
-        while (line != null) {
-            lines.add(line);
-            line = reader.readLine();
-        }
+       
         Random r = new Random();
-        String[] randomLine = (lines.get(r.nextInt(lines.size()))).split(":");
 
-        String ip = randomLine[0];
-        int portno = Integer.parseInt(randomLine[1]);
+        ProxyImport obj = proxyList.get(r.nextInt(proxyList.size()));
+
+        String ip = obj.proxyIP;
+        int portno = Integer.parseInt(obj.proxyPort);
         String username = "";
         String password = "";
-        if (randomLine.length > 2) {
-            username = randomLine[2];
-            password = randomLine[3];
+        if (obj.proxyLen> 2) {
+            username = obj.proxyUserName;
+            password = obj.proxyPassword;
         }
 
         CredentialsProvider credsprovider = new BasicCredentialsProvider();
@@ -73,7 +61,7 @@ public class FetchSource {
             portno = generateRandomPort();
         }
 
-        System.out.println("IP ::: " + randomLine[0] + "  Port ::: " + portno);
+        System.out.println("IP ::: " + ip + "  Port ::: " + portno);
         credsprovider.setCredentials(
                 new AuthScope(ip, portno),
                 new UsernamePasswordCredentials(username, password));
@@ -113,7 +101,7 @@ public class FetchSource {
                 Thread.sleep(10000);
                 do {
                     count++;
-                    responsebody = fetchPageSourceWithProxySecond(newurl);
+                    responsebody = fetchPageSourceWithProxySecond(newurl, proxyList);
                     if (responsebody == null) {
                         Thread.sleep(5000);
                         System.out.println("PROX FAILURE");
@@ -138,7 +126,7 @@ public class FetchSource {
             System.out.println("Exception = " + e);
             do {
                 count++;
-                responsebody = fetchPageSourceWithProxySecond(newurl);
+                responsebody = fetchPageSourceWithProxySecond(newurl, proxyList);
                 if (responsebody == null) {
                     System.out.println("PROX FAILURE");
                 }
@@ -153,25 +141,19 @@ public class FetchSource {
         return responsebody;
     }
 
-    public String fetchPageSourceWithProxySecond(String newurl) throws IOException {
+    public String fetchPageSourceWithProxySecond(String newurl, List<ProxyImport> proxyList) throws IOException {
 
-        BufferedReader reader = new BufferedReader(new FileReader("proxy.txt"));
-        String line = reader.readLine();
-        List<String> lines = new ArrayList<String>();
-        while (line != null) {
-            lines.add(line);
-            line = reader.readLine();
-        }
-        Random r = new Random();
-        String[] randomLine = (lines.get(r.nextInt(lines.size()))).split(":");
+         Random r = new Random();
 
-        String ip = randomLine[0];
-        int portno = Integer.parseInt(randomLine[1]);
+        ProxyImport obj = proxyList.get(r.nextInt(proxyList.size()));
+
+        String ip = obj.proxyIP;
+        int portno = Integer.parseInt(obj.proxyPort);
         String username = "";
         String password = "";
-        if (randomLine.length > 2) {
-            username = randomLine[2];
-            password = randomLine[3];
+        if (obj.proxyLen> 2) {
+            username = obj.proxyUserName;
+            password = obj.proxyPassword;
         }
 
         CredentialsProvider credsprovider = new BasicCredentialsProvider();
@@ -180,7 +162,7 @@ public class FetchSource {
             portno = generateRandomPort();
         }
 
-        System.out.println("IP ::: " + randomLine[0] + "  Port ::: " + portno);
+        System.out.println("IP ::: " + ip + "  Port ::: " + portno);
         credsprovider.setCredentials(
                 new AuthScope(ip, portno),
                 new UsernamePasswordCredentials(username, password));
@@ -281,25 +263,19 @@ public class FetchSource {
     }
     
     
-     public String fetchPageSourceWithProxyPost(String newurl, String urlParameter) throws IOException, InterruptedException {
+     public String fetchPageSourceWithProxyPost(String newurl, String urlParameter, List<ProxyImport> proxyList) throws IOException, InterruptedException {
 
-        BufferedReader reader = new BufferedReader(new FileReader("proxy.txt"));
-        String line = reader.readLine();
-        List<String> lines = new ArrayList<String>();
-        while (line != null) {
-            lines.add(line);
-            line = reader.readLine();
-        }
-        Random r = new Random();
-        String[] randomLine = (lines.get(r.nextInt(lines.size()))).split(":");
+         Random r = new Random();
 
-        String ip = randomLine[0];
-        int portno = Integer.parseInt(randomLine[1]);
+        ProxyImport obj = proxyList.get(r.nextInt(proxyList.size()));
+
+        String ip = obj.proxyIP;
+        int portno = Integer.parseInt(obj.proxyPort);
         String username = "";
         String password = "";
-        if (randomLine.length > 2) {
-            username = randomLine[2];
-            password = randomLine[3];
+        if (obj.proxyLen> 2) {
+            username = obj.proxyUserName;
+            password = obj.proxyPassword;
         }
 
         CredentialsProvider credsprovider = new BasicCredentialsProvider();
@@ -308,7 +284,7 @@ public class FetchSource {
             portno = generateRandomPort();
         }
 
-        System.out.println("IP ::: " + randomLine[0] + "  Port ::: " + portno);
+        System.out.println("IP ::: " + ip + "  Port ::: " + portno);
         credsprovider.setCredentials(
                 new AuthScope(ip, portno),
                 new UsernamePasswordCredentials(username, password));
@@ -356,7 +332,7 @@ public class FetchSource {
                 Thread.sleep(10000);
                 do {
                     count++;
-                    responsebody = fetchPageSourceWithProxySecond(newurl);
+                    responsebody = fetchPageSourceWithProxySecondPost(newurl, urlParameter, proxyList);
                     if (responsebody == null) {
                         Thread.sleep(5000);
                         System.out.println("PROX FAILURE");
@@ -381,7 +357,7 @@ public class FetchSource {
             System.out.println("Exception = " + e);
             do {
                 count++;
-                responsebody = fetchPageSourceWithProxySecondPost(newurl, urlParameter);
+                responsebody = fetchPageSourceWithProxySecondPost(newurl, urlParameter, proxyList);
                 if (responsebody == null) {
                     System.out.println("PROX FAILURE");
                 }
@@ -396,25 +372,19 @@ public class FetchSource {
         return responsebody;
     }
      
-      public String fetchPageSourceWithProxySecondPost(String newurl, String urlParameter) throws IOException {
+      public String fetchPageSourceWithProxySecondPost(String newurl, String urlParameter, List<ProxyImport> proxyList) throws IOException {
 
-        BufferedReader reader = new BufferedReader(new FileReader("proxy.txt"));
-        String line = reader.readLine();
-        List<String> lines = new ArrayList<String>();
-        while (line != null) {
-            lines.add(line);
-            line = reader.readLine();
-        }
-        Random r = new Random();
-        String[] randomLine = (lines.get(r.nextInt(lines.size()))).split(":");
+         Random r = new Random();
 
-        String ip = randomLine[0];
-        int portno = Integer.parseInt(randomLine[1]);
+        ProxyImport obj = proxyList.get(r.nextInt(proxyList.size()));
+
+        String ip = obj.proxyIP;
+        int portno = Integer.parseInt(obj.proxyPort);
         String username = "";
         String password = "";
-        if (randomLine.length > 2) {
-            username = randomLine[2];
-            password = randomLine[3];
+        if (obj.proxyLen> 2) {
+            username = obj.proxyUserName;
+            password = obj.proxyPassword;
         }
 
         CredentialsProvider credsprovider = new BasicCredentialsProvider();
@@ -423,7 +393,7 @@ public class FetchSource {
             portno = generateRandomPort();
         }
 
-        System.out.println("IP ::: " + randomLine[0] + "  Port ::: " + portno);
+        System.out.println("IP ::: " + ip + "  Port ::: " + portno);
         credsprovider.setCredentials(
                 new AuthScope(ip, portno),
                 new UsernamePasswordCredentials(username, password));
