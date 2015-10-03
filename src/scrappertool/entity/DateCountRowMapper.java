@@ -7,6 +7,13 @@ package scrappertool.entity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.jdbc.core.RowMapper;
 
 /**
@@ -19,7 +26,14 @@ public class DateCountRowMapper implements RowMapper{
     public DateCount mapRow(ResultSet rs, int rowNum) throws SQLException {
                 DateCount objDateCount = new DateCount();
                 objDateCount.setCount(rs.getInt(1));
-                objDateCount.setLaunchDate(rs.getDate(2));
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                Date date=null;
+        try {
+            date = format.parse(rs.getString(2));
+        } catch (ParseException ex) {
+            Logger.getLogger(DateCountRowMapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                objDateCount.setLaunchDate(date);
                 return objDateCount;
             }
     

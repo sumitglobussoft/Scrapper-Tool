@@ -9,6 +9,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -222,7 +230,7 @@ public class FetchSource {
         {
             try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
                 HttpGet httpget = new HttpGet(url);
-
+             
                 ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                     public String handleResponse(
                             final HttpResponse response) throws ClientProtocolException, IOException {
@@ -453,4 +461,147 @@ public class FetchSource {
         }
         return responsebody;
     }
+      
+      public String sendGet(String url) throws Exception {
+
+		
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+//		System.out.println(response.toString());
+        return response.toString();
+
+	}
+      
+      public String sendPostWithoutProxy(String pageurl, String urlParameter) throws Exception {
+        
+        URL url = new URL(pageurl);
+        String urlParameters = "listingid=" + urlParameter;
+      
+        String body="";
+        URLConnection conn=null;
+        try{
+       //URLConnection conn = url.openConnection();
+            conn = url.openConnection();
+       conn.setDoOutput(true);
+       OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+        // OutputStreamWriter wr = new OutputStreamWriter(os);
+        wr.write(urlParameters);
+        wr.flush();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+       // BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = rd.readLine()) != null) {
+            response.append(inputLine);
+        }
+        rd.close();
+        body = response.toString();
+        }
+        catch(Exception e)
+        {   
+             System.out.println("outside exception"+e);
+            int respCode = ((HttpURLConnection)conn).getResponseCode();
+            System.out.println(respCode);
+            try{
+       //URLConnection conn = url.openConnection();
+            conn = url.openConnection();
+       conn.setDoOutput(true);
+       OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+        // OutputStreamWriter wr = new OutputStreamWriter(os);
+        wr.write(urlParameters);
+        wr.flush();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+       // BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = rd.readLine()) != null) {
+            response.append(inputLine);
+        }
+        rd.close();
+        body = response.toString();
+        }
+        catch(Exception e1)
+        {   System.out.println("inside exception"+e1);
+             respCode = ((HttpURLConnection)conn).getResponseCode();
+            System.out.println(respCode);
+             try{
+       //URLConnection conn = url.openConnection();
+            conn = url.openConnection();
+       conn.setDoOutput(true);
+       OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+        // OutputStreamWriter wr = new OutputStreamWriter(os);
+        wr.write(urlParameters);
+        wr.flush();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+       // BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = rd.readLine()) != null) {
+            response.append(inputLine);
+        }
+        rd.close();
+        body = response.toString();
+        }
+        catch(Exception e2)
+        {   System.out.println("inside inside exception"+e2);
+             respCode = ((HttpURLConnection)conn).getResponseCode();
+            System.out.println(respCode);
+             try{
+       //URLConnection conn = url.openConnection();
+            conn = url.openConnection();
+       conn.setDoOutput(true);
+       OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+        // OutputStreamWriter wr = new OutputStreamWriter(os);
+        wr.write(urlParameters);
+        wr.flush();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+       // BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = rd.readLine()) != null) {
+            response.append(inputLine);
+        }
+        rd.close();
+        body = response.toString();
+        }
+        catch(Exception e3)
+        {   System.out.println("inside4 exception"+e3);
+             respCode = ((HttpURLConnection)conn).getResponseCode();
+            System.out.println(respCode);
+            
+        }
+        }
+        }
+            
+        }
+
+        return body;
+    }
+      
 }

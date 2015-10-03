@@ -38,8 +38,7 @@ public class LaunchData implements Serializable {
     @Column(name = "PRODUCT")
     private String product;
     @Column(name = "LAUNCH_DATE")
-    @Temporal(TemporalType.DATE)
-    private Date launchDate;
+    private String launchDate;
     @Column(name = "LAUNCH_TIME")
     private String launchTime;
     @Column(name = "FRONTEND_PRICE")
@@ -53,8 +52,7 @@ public class LaunchData implements Serializable {
     @Column(name = "NICHE")
     private String niche;
     @Column(name = "PRE_LAUNCH_DATE")
-    @Temporal(TemporalType.DATE)
-    private Date preLaunchDate;
+    private String preLaunchDate;
     @Lob
     @Column(name = "DESCRIPTION")
     private String description;
@@ -104,13 +102,6 @@ public class LaunchData implements Serializable {
         this.product = product;
     }
 
-    public Date getLaunchDate() {
-        return launchDate;
-    }
-
-    public void setLaunchDate(Date launchDate) {
-        this.launchDate = launchDate;
-    }
 
     public String getLaunchTime() {
         return launchTime;
@@ -160,13 +151,7 @@ public class LaunchData implements Serializable {
         this.niche = niche;
     }
 
-    public Date getPreLaunchDate() {
-        return preLaunchDate;
-    }
 
-    public void setPreLaunchDate(Date preLaunchDate) {
-        this.preLaunchDate = preLaunchDate;
-    }
 
     public String getDescription() {
         return description;
@@ -199,6 +184,24 @@ public class LaunchData implements Serializable {
     public void setClicks(String clicks) {
         this.clicks = clicks;
     }
+
+    public String getLaunchDate() {
+        return launchDate;
+    }
+
+    public void setLaunchDate(String launchDate) {
+        this.launchDate = launchDate;
+    }
+
+    public String getPreLaunchDate() {
+        return preLaunchDate;
+    }
+
+    public void setPreLaunchDate(String preLaunchDate) {
+        this.preLaunchDate = preLaunchDate;
+    }
+    
+    
 
     @Override
     public int hashCode() {

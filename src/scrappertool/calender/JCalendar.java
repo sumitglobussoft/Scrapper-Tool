@@ -360,9 +360,7 @@ public class JCalendar {
         Calendar temp = (Calendar) calendar.clone();
         temp.set(Calendar.DAY_OF_MONTH, 1);
         getFirstDate(temp);
-        System.out.println("inside=================================");
         int currentMonth = calendar.get(Calendar.MONTH);
-        System.out.println("currentMonth::" + currentMonth);
 
         for (int i = 0; i < days.length; i++) {
             int month = temp.get(Calendar.MONTH);
@@ -399,7 +397,6 @@ public class JCalendar {
             }
         }
 
-        System.out.println("\n\nnewList::" + newList.size());
 
         for (JCalendarDay day : days) {
 

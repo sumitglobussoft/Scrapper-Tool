@@ -26,6 +26,7 @@ import org.jsoup.select.Elements;
 import scrappertool.dao.LaunchDataDao;
 import scrappertool.entity.LaunchData;
 import scrappertool.entity.ProxyImport;
+import scrappertool.ui.MainPage;
 import static scrappertool.ui.MainPage.loggerArea;
 import scrappertool.utility.FetchSource;
 
@@ -36,7 +37,6 @@ import scrappertool.utility.FetchSource;
 public class ScrapeFromUrl {
 
     FetchSource objFetchSource = new FetchSource();
-    List<String> getMuncheyeLaunchURL = new ArrayList<>();
 
     public void dataScrapping(LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
 
@@ -44,15 +44,103 @@ public class ScrapeFromUrl {
         String urlJvnotifypro = "http://v3.jvnotifypro.com/account/";
         String urlLaunchsuite = "http://www.launchsuite.net/";
         try {
+            List<Future<String>> list = new ArrayList<Future<String>>();
+            
 
-            getMuncheyeLaunch(urlMuncheye, objLaunchDataDao, proxyList);
-            getJvnotifyproLaunch(urlJvnotifypro, objLaunchDataDao, proxyList);
-            getLaunchsuiteLaunch(urlLaunchsuite, objLaunchDataDao, proxyList);
+            ExecutorService executor1 = Executors.newFixedThreadPool(1);
+            Callable worker1 = new MuncheyeMainThread(urlMuncheye, objLaunchDataDao, proxyList, objFetchSource);
 
+            try {
+                Future<String> future1 = executor1.submit(worker1);
+                list.add(future1);
+            } catch (Exception ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            ExecutorService executor2 = Executors.newFixedThreadPool(1);
+            Callable worker2 = new JvnotifyproMainThread(urlJvnotifypro, objLaunchDataDao, proxyList, objFetchSource);
+
+            try {
+                Future<String> future2 = executor2.submit(worker2);
+                list.add(future2);
+            } catch (Exception ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            ExecutorService executor3 = Executors.newFixedThreadPool(1);
+            Callable worker3 = new LaunchsuitMainThread(urlLaunchsuite, objLaunchDataDao, proxyList, objFetchSource);
+
+            try {
+                Future<String> future3 = executor3.submit(worker3);
+                list.add(future3);
+            } catch (Exception ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            for (Future<String> fut : list) {
+                try {
+                    //print the return value of Future, notice the output delay in console
+                    // because Future.get() waits for task to get completed
+                    System.out.println(new Date() + "::" + fut.get());
+                } catch (InterruptedException | ExecutionException ep) {
+                    ep.printStackTrace();
+                }
+            }
+
+
+//            getMuncheyeLaunch(urlMuncheye, objLaunchDataDao, proxyList);
+//            getJvnotifyproLaunch(urlJvnotifypro, objLaunchDataDao, proxyList);
+//            getLaunchsuiteLaunch(urlLaunchsuite, objLaunchDataDao, proxyList);
         } catch (Exception ex) {
             Logger.getLogger(ScrapeFromUrl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+}
+
+class LaunchIDAN {
+
+    String id;
+    String an;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAn() {
+        return an;
+    }
+
+    public void setAn(String an) {
+        this.an = an;
+    }
+
+}
+
+class MuncheyeMainThread implements Callable<String> {
+
+    List<String> getMuncheyeLaunchURL = new ArrayList<>();
+    String urlMuncheye;
+    LaunchDataDao objLaunchDataDao = null;
+    List<ProxyImport> proxyList = null;
+    FetchSource objFetchSource = null;
+
+    MuncheyeMainThread(String urlMuncheye, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList, FetchSource objFetchSource) {
+        this.urlMuncheye = urlMuncheye;
+        this.objLaunchDataDao = objLaunchDataDao;
+        this.proxyList = proxyList;
+        this.objFetchSource = objFetchSource;
+    }
+
+    @Override
+    public String call() throws Exception {
+        getMuncheyeLaunch(urlMuncheye, objLaunchDataDao, proxyList);
+        return "done";
     }
 
     public void getMuncheyeLaunch(String urlPage, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
@@ -62,7 +150,13 @@ public class ScrapeFromUrl {
         Document objDocument = null;
         try {
 
-            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
+            if ((proxyList != null) && (proxyList.size() > 0)) {
+                System.out.println("with prox");
+                urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
+            } else {
+                System.out.println("without prox");
+                urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+            }
             objDocument = Jsoup.parse(urlResponse);
 
             Elements e = objDocument.select("div[id=right-column] div[class=item_info] a");
@@ -101,6 +195,29 @@ public class ScrapeFromUrl {
 
     }
 
+}
+
+class JvnotifyproMainThread implements Callable<String> {
+
+    List<String> getMuncheyeLaunchURL = new ArrayList<>();
+    String urlJvnotifypro;
+    LaunchDataDao objLaunchDataDao = null;
+    List<ProxyImport> proxyList = null;
+    FetchSource objFetchSource = null;
+
+    JvnotifyproMainThread(String urlJvnotifypro, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList, FetchSource objFetchSource) {
+        this.urlJvnotifypro = urlJvnotifypro;
+        this.objLaunchDataDao = objLaunchDataDao;
+        this.proxyList = proxyList;
+        this.objFetchSource = objFetchSource;
+    }
+
+    @Override
+    public String call() throws Exception {
+        getJvnotifyproLaunch(urlJvnotifypro, objLaunchDataDao, proxyList);
+        return "done";
+    }
+
     public void getJvnotifyproLaunch(String urlPage, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
 
         List<LaunchData> listLaunchData = new ArrayList();
@@ -115,7 +232,7 @@ public class ScrapeFromUrl {
             String promotionType = "NA";
             String vendor = "NA";
             String product = "NA";
-            Date launchDate = null;
+            String launchDate = null;
             String launchTime = "NA";
             String frontEndPrice = "NA";
             String commission = "NA";
@@ -124,12 +241,18 @@ public class ScrapeFromUrl {
             String niche = "NA";
             String site = "http://v3.jvnotifypro.com/account/";
 
-            Date preLaunchDate = null;
+            String preLaunchDate = null;
             String description = "NA";
             String ticket = "NA";
             String clicks = "NA";
 
-            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
+            if ((proxyList != null) && (proxyList.size() > 0)) {
+                System.out.println("with prox");
+                urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
+            } else {
+                System.out.println("without prox");
+                urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+            }
             objDocument = Jsoup.parse(urlResponse);
 //            System.out.println(""+objDocument);
 
@@ -159,7 +282,7 @@ public class ScrapeFromUrl {
                     }
 
                     DateFormat format = new SimpleDateFormat("EEE, MMMM dd yyyy", Locale.ENGLISH);
-                    launchDate = format.parse(dateUnformated);
+                    launchDate = new SimpleDateFormat("yyyy-MM-dd").format(format.parse(dateUnformated));
 
                     System.out.println("launchDate::" + launchDate);
                 } catch (Exception vp) {
@@ -175,7 +298,7 @@ public class ScrapeFromUrl {
                         }
 
                         DateFormat format = new SimpleDateFormat("EEE, MMMM dd yyyy", Locale.ENGLISH);
-                        launchDate = format.parse(dateUnformated);
+                        launchDate = new SimpleDateFormat("yyyy-MM-dd").format(format.parse(dateUnformated));
 
                         System.out.println("launchDate::" + launchDate);
                     } catch (ParseException parseException) {
@@ -246,12 +369,13 @@ public class ScrapeFromUrl {
                 objLaunchData.setAffiliateNetwork(affiliateNetwork);
                 objLaunchData.setNiche(niche);
                 objLaunchData.setSite(site);
-                objLaunchData.setPreLaunchDate(preLaunchDate);
+//                objLaunchData.setPreLaunchDate(preLaunchDate);
                 objLaunchData.setDescription(description);
                 objLaunchData.setTicket(ticket);
                 objLaunchData.setClicks(clicks);
                 listLaunchData.add(objLaunchData);
 
+//                System.out.println("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
                 loggerArea.append("\nProduct           ----------> : " + objLaunchData.getProduct().trim());
                 loggerArea.append("\nVendor            ----------> : " + objLaunchData.getVendor().trim());
                 loggerArea.append("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
@@ -272,6 +396,29 @@ public class ScrapeFromUrl {
 
     }
 
+}
+
+class LaunchsuitMainThread implements Callable<String> {
+
+    List<String> getMuncheyeLaunchURL = new ArrayList<>();
+    String urlLaunchsuite;
+    LaunchDataDao objLaunchDataDao = null;
+    List<ProxyImport> proxyList = null;
+    FetchSource objFetchSource = null;
+
+    LaunchsuitMainThread(String urlLaunchsuite, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList, FetchSource objFetchSource) {
+        this.urlLaunchsuite = urlLaunchsuite;
+        this.objLaunchDataDao = objLaunchDataDao;
+        this.proxyList = proxyList;
+        this.objFetchSource = objFetchSource;
+    }
+
+    @Override
+    public String call() throws Exception {
+        getLaunchsuiteLaunch(urlLaunchsuite, objLaunchDataDao, proxyList);
+        return "done";
+    }
+
     public void getLaunchsuiteLaunch(String urlLaunchsuite, LaunchDataDao objLaunchDataDao, List<ProxyImport> proxyList) {
         System.out.println("========Getting  Launch List From Launchsuite========");
         //"http://www.launchsuite.net/getmelistingdetails.php"
@@ -280,8 +427,12 @@ public class ScrapeFromUrl {
         Document objDocument = null;
         List<LaunchIDAN> allLaunchsuiteID = new ArrayList<>();
         try {
+            if ((proxyList != null) && (proxyList.size() > 0)) {
+                urlResponse = objFetchSource.fetchPageSourceWithProxy(urlLaunchsuite, proxyList);
+            } else {
+                urlResponse = objFetchSource.fetchsourceWithoutProxy(urlLaunchsuite);
+            }
 
-            urlResponse = objFetchSource.fetchPageSourceWithProxy(urlLaunchsuite, proxyList);
             objDocument = Jsoup.parse(urlResponse);
 
             Elements e = objDocument.select("div[class=launches-container] div[class=singelisting full]");
@@ -323,29 +474,6 @@ public class ScrapeFromUrl {
             Logger.getLogger(ScrapeFromUrl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-}
-
-class LaunchIDAN {
-
-    String id;
-    String an;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAn() {
-        return an;
-    }
-
-    public void setAn(String an) {
-        this.an = an;
     }
 
 }

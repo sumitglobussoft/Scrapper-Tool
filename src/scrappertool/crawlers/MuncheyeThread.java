@@ -7,7 +7,6 @@ package scrappertool.crawlers;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
@@ -56,7 +55,7 @@ public class MuncheyeThread implements Callable<String> {
             String promotionType = "NA";
             String vendor = "NA";
             String product = "NA";
-            Date launchDate = null;
+            String launchDate = null;
             String launchTime = "NA";
             String frontEndPrice = "NA";
             String commission = "NA";
@@ -65,16 +64,22 @@ public class MuncheyeThread implements Callable<String> {
             String niche = "NA";
             String site = "http://muncheye.com/";
 
-            Date preLaunchDate = null;
+            String preLaunchDate = null;
             String description = "NA";
             String ticket = "NA";
             String clicks = "NA";
 
-//            objDocument = Jsoup.parse(urlPage);
-            System.out.println("" + urlPage);
+            
+            if((proxyList!=null)&&(proxyList.size()>0)){
+                System.out.println("with prox");
             urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
+             }
+            else {
+                System.out.println("without prox");
+            urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+            }         
+            
             objDocument = Jsoup.parse(urlResponse);
-//            System.out.println("objDocument"+objDocument);
 
             try {
                 promotionType = objDocument.select("div[class=col_heading]").text();
@@ -102,7 +107,7 @@ public class MuncheyeThread implements Callable<String> {
                 System.out.println("launchDate:" + launchDateString);
                 System.out.println("coverting to data form");
                 DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
-                launchDate = format.parse(launchDateString);
+                launchDate = new SimpleDateFormat("yyyy-MM-dd").format(format.parse(launchDateString));
 
             } catch (Exception v1) {
             }

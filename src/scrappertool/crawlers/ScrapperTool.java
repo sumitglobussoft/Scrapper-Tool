@@ -8,11 +8,14 @@ package scrappertool.crawlers;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import scrappertool.dao.LaunchDataDao;
 import scrappertool.dao.LaunchDataDaoImpl;
 import scrappertool.entity.DateCount;
+import scrappertool.utility.FetchSource;
 
 /**
  *
@@ -31,41 +34,18 @@ public class ScrapperTool {
         LaunchDataDao objLaunchDataDao
                 = (LaunchDataDaoImpl) context.getBean("LaunchDataDaoImpl");
         
+//objLaunchDataDao.createTable();
+//        ScrapeFromUrl o=new ScrapeFromUrl();
+//        o.getJvnotifyproLaunch("http://www.launchsuite.net/getmelistingdetails.php", objLaunchDataDao, null);
 
-         List<Integer> list = new ArrayList<Integer>();
-
-        for (int i=0;i<31;i++) {
-            list.add(i);
-        }
-        
-       List<DateCount> listLaunchDatas = objLaunchDataDao.listLaunchDatas();
-        System.out.println("listLaunchDatas.size()::"+listLaunchDatas.size());
-        
-        Calendar today = Calendar.getInstance();
-
-
-         List<DateCount> newList = new ArrayList<>();
-        for (DateCount listLaunchData : listLaunchDatas) {
-            
-            System.out.println("LaunchData::"+listLaunchData.getLaunchDate()+"  Count::"+listLaunchData.getCount());
-
-            Calendar cal = Calendar.getInstance();
-            
-            cal.setTime(listLaunchData.getLaunchDate());
-            
-             
- 
-            if((cal.get(Calendar.YEAR)==today.get(Calendar.YEAR))&&(cal.get(Calendar.MONTH)==today.get(Calendar.MONTH))){
-                newList.add(listLaunchData);
-            }
-        }
-        
-        System.out.println("\n\n\nnewList::"+newList.size());
-        
-        for (DateCount newList1 : newList) {
-            System.out.println(newList1.getLaunchDate()+"========"+newList1.getCount());
-            
-        }
+//        FetchSource obj=new FetchSource();
+//        try {
+//           String a= obj.sendPostWithoutProxy("http://www.launchsuite.net/getmelistingdetails.php", "93");
+//            System.out.println("a"+a);
+////       
+//        } catch (Exception ex) {
+//            Logger.getLogger(ScrapperTool.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
 
     }

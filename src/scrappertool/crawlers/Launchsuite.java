@@ -7,7 +7,6 @@ package scrappertool.crawlers;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -38,11 +37,11 @@ public class Launchsuite {
         try {
 
             LaunchData objLaunchData = new LaunchData();
-            System.out.println("====================urlParameter==================" + urlParameter);
+
             String promotionType = "NA";
             String vendor = "NA";
             String product = "NA";
-            Date launchDate = null;
+            String launchDate = null;
             String launchTime = "NA";
             String frontEndPrice = "NA";
             String commission = "NA";
@@ -51,14 +50,18 @@ public class Launchsuite {
             String niche = "NA";
             String site = "http://www.launchsuite.net/";
 
-            Date preLaunchDate = null;
+            String preLaunchDate = null;
             String description = "NA";
             String ticket = "NA";
             String clicks = "NA";
 
-            urlResponse = objFetchSource.fetchPageSourceWithProxyPost(urlPage, urlParameter, proxyList);
-
-//            System.out.println("urlResponse" + urlResponse);
+            if ((proxyList != null) && (proxyList.size() > 0)) {
+                System.out.println("with prox");
+                urlResponse = objFetchSource.fetchPageSourceWithProxyPost(urlPage, urlParameter, proxyList);
+            } else {
+                System.out.println("without prox");
+                urlResponse = objFetchSource.sendPostWithoutProxy(urlPage, urlParameter);
+            }
 
             try {
                 JSONObject objJSONObject = new JSONObject(urlResponse);
@@ -72,11 +75,12 @@ public class Launchsuite {
                     System.out.println("launchDate:" + tempLaunchdate);
                     System.out.println("coverting to data form");
                     DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
-                    launchDate = format.parse(tempLaunchdate);
+                    launchDate = new SimpleDateFormat("yyyy-MM-dd").format(format.parse(tempLaunchdate));
+
                 } catch (JSONException jSONException) {
                 }
 
-                commission = objJSONObject.getString("fecommisssion")+"%";
+                commission = objJSONObject.getString("fecommisssion") + "%";
 
                 jvPage = objJSONObject.getString("zoourl");
 
@@ -85,7 +89,7 @@ public class Launchsuite {
                 try {
                     String tempdescription = objJSONObject.getString("listingDescription");
                     objDocument = Jsoup.parse(tempdescription);
-                    System.out.println("---------:::objDocument :::----------> : " + objDocument);
+
                     description = objDocument.text();
                 } catch (JSONException jSONException) {
                 }
@@ -101,25 +105,24 @@ public class Launchsuite {
             System.out.println("---------6.niche       ----------> : " + niche);
             System.out.println("---------7.description ----------> : " + description);
 
-           
-           objLaunchData.setPromotionType(promotionType);
-           objLaunchData.setVendor(vendor);
-           objLaunchData.setProduct(product);
-           objLaunchData.setLaunchDate(launchDate);
-           objLaunchData.setLaunchTime(launchTime);
-           objLaunchData.setFrontendPrice(frontEndPrice);
-           objLaunchData.setCommission(commission);
-           objLaunchData.setJvPage(jvPage);
-           objLaunchData.setAffiliateNetwork(affiliateNetwork);
-           objLaunchData.setNiche(niche);
-           objLaunchData.setSite(site);
-           objLaunchData.setPreLaunchDate(preLaunchDate);
-           objLaunchData.setDescription(description);
-           objLaunchData.setTicket(ticket);
-           objLaunchData.setClicks(clicks);
-           objLaunchDataDao.insertLaunchData(objLaunchData);
-           
-           loggerArea.append("\nProduct           ----------> : " + objLaunchData.getProduct().trim());
+            objLaunchData.setPromotionType(promotionType);
+            objLaunchData.setVendor(vendor);
+            objLaunchData.setProduct(product);
+            objLaunchData.setLaunchDate(launchDate);
+            objLaunchData.setLaunchTime(launchTime);
+            objLaunchData.setFrontendPrice(frontEndPrice);
+            objLaunchData.setCommission(commission);
+            objLaunchData.setJvPage(jvPage);
+            objLaunchData.setAffiliateNetwork(affiliateNetwork);
+            objLaunchData.setNiche(niche);
+            objLaunchData.setSite(site);
+            objLaunchData.setPreLaunchDate(preLaunchDate);
+            objLaunchData.setDescription(description);
+            objLaunchData.setTicket(ticket);
+            objLaunchData.setClicks(clicks);
+            objLaunchDataDao.insertLaunchData(objLaunchData);
+
+            loggerArea.append("\nProduct            ----------> : " + objLaunchData.getProduct().trim());
             loggerArea.append("\nVendor            ----------> : " + objLaunchData.getVendor().trim());
             loggerArea.append("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
             loggerArea.append("\nNiche             ----------> : " + objLaunchData.getNiche().trim());

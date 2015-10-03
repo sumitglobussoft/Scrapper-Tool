@@ -5,6 +5,7 @@
  */
 package scrappertool.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.sql.DataSource;
@@ -101,8 +102,9 @@ public class LaunchDataDaoImpl implements LaunchDataDao {
     
     @Override
     public List<LaunchData> listLaunchData(Date selectedDate){
+        String launchDate = new SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
         String SQL = "select * from launch_data where LAUNCH_DATE = ?";
-        List<LaunchData> listLaunchData = jdbcTemplateObject.query(SQL, new Object[]{selectedDate},
+        List<LaunchData> listLaunchData = jdbcTemplateObject.query(SQL, new Object[]{launchDate},
                 new BeanPropertyRowMapper(LaunchData.class));
         return listLaunchData;
     }
@@ -114,4 +116,35 @@ public class LaunchDataDaoImpl implements LaunchDataDao {
         List<DateCount> listDateCount = jdbcTemplateObject.query(SQL,new DateCountRowMapper());
         return listDateCount;
     }
+    
+    @Override
+     public void createTable(){
+        try {
+            String sql = "CREATE TABLE IF NOT EXISTS `launch_data` (\n"
+                    + "  `ID` integer primary key autoincrement,\n"
+                    + "  `SITE` varchar(200) DEFAULT NULL,\n"
+                    + "  `VENDOR` varchar(200) NOT NULL,\n"
+                    + "  `PRODUCT` varchar(200) NOT NULL,\n"
+                    + "  `LAUNCH_DATE` date NOT NULL,\n"
+                    + "  `LAUNCH_TIME` varchar(20) DEFAULT NULL,\n"
+                    + "  `FRONTEND_PRICE` varchar(200) DEFAULT NULL,\n"
+                    + "  `COMMISSION` varchar(200) DEFAULT NULL,\n"
+                    + "  `JV_PAGE` varchar(200) DEFAULT NULL,\n"
+                    + "  `AFFILIATE_NETWORK` varchar(200) DEFAULT NULL,\n"
+                    + "  `NICHE` varchar(200) DEFAULT NULL,\n"
+                    + "  `PRE_LAUNCH_DATE` date DEFAULT NULL,\n"
+                    + "  `DESCRIPTION` text,\n"
+                    + "  `PROMOTION_TYPE` varchar(200) DEFAULT NULL,\n"
+                    + "  `TICKET` varchar(200) DEFAULT NULL,\n"
+                    + "  `CLICKS` varchar(200) DEFAULT NULL)";
+            jdbcTemplateObject.execute(sql);
+            System.out.println("table create");
+            String sql2 = "CREATE UNIQUE INDEX uniqIn on launch_data (VENDOR, PRODUCT, LAUNCH_DATE)";
+            jdbcTemplateObject.execute(sql2);
+            
+            System.out.println("done with condi");
+        } catch (DataAccessException dataAccessException) {
+//            dataAccessException.printStackTrace();
+        }
+     }
 }

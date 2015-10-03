@@ -67,5 +67,7 @@ public interface LaunchDataDao {
    public List<LaunchData> listLaunchData(Date selectedDate);
    
    public List<DateCount> listLaunchDatas();
+   
+   public void createTable();
 
 }
