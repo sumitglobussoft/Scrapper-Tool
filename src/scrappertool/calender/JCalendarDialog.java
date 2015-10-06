@@ -24,7 +24,9 @@ import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import scrappertool.dao.LaunchDataDao;
  
 /**
@@ -248,8 +250,118 @@ public class JCalendarDialog {
  
         mainPanel.add(jcalendar.getPanel(), BorderLayout.CENTER);
  
+               JPanel colorPanel = new JPanel();
+        
+
+
+
+        JLabel jLabel1 = new javax.swing.JLabel();
+        JLabel jLabel2 = new javax.swing.JLabel();
+        JLabel jLabel3 = new javax.swing.JLabel();
+        JLabel jLabel4 = new javax.swing.JLabel();
+        JLabel jLabel5 = new javax.swing.JLabel();
+        JLabel jLabel6 = new javax.swing.JLabel();
+        JTextField jTextField1 = new javax.swing.JTextField();
+        JTextField jTextField2 = new javax.swing.JTextField();
+        JTextField jTextField3 = new javax.swing.JTextField();
+        JTextField jTextField4 = new javax.swing.JTextField();
+        JTextField jTextField5 = new javax.swing.JTextField();
+        
+     jLabel1.setText("<5 Launches");
+
+        jLabel2.setText(">5 Launches");
+
+        jLabel3.setText(">10 Launches");
+
+        jLabel4.setText("Today's Day");
+
+        jLabel5.setText("Selected Date");
+
+        jLabel6.setText("COLOR CODE");
+        
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(51, 255, 51));
+        
+        jTextField2.setEditable(false);
+        jTextField2.setBackground(new java.awt.Color(0, 255, 255));
+        
+        jTextField3.setEditable(false);
+        jTextField3.setBackground(new java.awt.Color(204, 0, 0));
+        
+        jTextField4.setEditable(false);
+        jTextField4.setBackground(new java.awt.Color(255, 255, 0));
+        
+        jTextField5.setEditable(false);
+        jTextField5.setBackground(new java.awt.Color(102, 102, 102));
+        
+         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(colorPanel);
+        colorPanel.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField3)
+                            .addComponent(jTextField4)
+                            .addComponent(jTextField5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        
+//        colorPanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+//        JLabel title = new JLabel();
+//        title.setText("COLOR CODE FOR LAUNCH");
+//        JLabel colour1 = new JLabel();
+//        colour1.setText("GREEN");
+//   
+//        colorPanel.add(title, JPanel.LEFT_ALIGNMENT);
+//        colorPanel.add(colour1,JPanel.RIGHT_ALIGNMENT);
+//        mainPanel.add(colorPanel,BorderLayout.LINE_END);
+        
+    
+        mainPanel.add(colorPanel,BorderLayout.LINE_END);
+ 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(0,50,30));
+        buttonPanel.setLayout(new FlowLayout(0,30,30));
  
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new OKButtonActionListener());

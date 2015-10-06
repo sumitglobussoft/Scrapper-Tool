@@ -227,6 +227,7 @@ int a=JOptionPane.showConfirmDialog(null, "Do you really want to Refresh all the
                 withoutProxyRadio.setEnabled(false);
                 withProxyRadio.setEnabled(false);
                 calendarButton.setEnabled(false);
+                refreshDB.setEnabled(false);
                 ExecutorService executor = Executors.newFixedThreadPool(1);
                 Callable worker = new DeleteDBStartCrawl(objLaunchDataDao, proxyList);
                 
@@ -252,7 +253,8 @@ int a=JOptionPane.showConfirmDialog(null, "Do you really want to Refresh all the
         if (dialog.getReturnCode() == JCalendarDialog.OK_PRESSED) {
             jTextField1.setText(dialog.getFormattedSelectedDate());
 
-            if (objLaunchDataDao.listLaunchData().size() > 0) {
+            List<LaunchData> listLaunchData = objLaunchDataDao.listLaunchData();
+            if ((listLaunchData!=null)&&(listLaunchData.size() > 0)) {
 
                  loggerArea.append("\n==============================================================================================");
                 loggerArea.append("\nDetails for: " + dialog.getFormattedSelectedDate());

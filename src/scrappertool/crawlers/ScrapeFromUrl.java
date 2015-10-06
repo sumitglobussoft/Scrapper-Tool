@@ -5,6 +5,7 @@
  */
 package scrappertool.crawlers;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -155,7 +156,15 @@ class MuncheyeMainThread implements Callable<String> {
                 urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
             } else {
                 System.out.println("without prox");
-                urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                try {
+                    urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                } catch (IOException iOException) {
+                    try {
+                        System.out.println("2nd time");
+                        urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                    } catch (IOException iOException1) {
+                    }
+                }
             }
             objDocument = Jsoup.parse(urlResponse);
 
@@ -251,7 +260,15 @@ class JvnotifyproMainThread implements Callable<String> {
                 urlResponse = objFetchSource.fetchPageSourceWithProxy(urlPage, proxyList);
             } else {
                 System.out.println("without prox");
-                urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                try {
+                    urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                } catch (IOException iOException) {
+                    try {
+                        System.out.println("2nd time");
+                        urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                    } catch (IOException iOException1) {
+                    }
+                }
             }
             objDocument = Jsoup.parse(urlResponse);
 //            System.out.println(""+objDocument);
@@ -430,7 +447,15 @@ class LaunchsuitMainThread implements Callable<String> {
             if ((proxyList != null) && (proxyList.size() > 0)) {
                 urlResponse = objFetchSource.fetchPageSourceWithProxy(urlLaunchsuite, proxyList);
             } else {
-                urlResponse = objFetchSource.fetchsourceWithoutProxy(urlLaunchsuite);
+                try {
+                    urlResponse = objFetchSource.fetchsourceWithoutProxy(urlLaunchsuite);
+                } catch (IOException iOException) {
+                    try {
+                        System.out.println("2nd time");
+                    urlResponse = objFetchSource.fetchsourceWithoutProxy(urlLaunchsuite);
+                    } catch (Exception e) {
+                    }
+                }
             }
 
             objDocument = Jsoup.parse(urlResponse);

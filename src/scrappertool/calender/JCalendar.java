@@ -372,7 +372,7 @@ public class JCalendar {
                     color = Color.YELLOW;
                 }
                 if (isToday(temp, selectedDate)) {
-                    color = Color.GREEN;
+                    color = Color.GRAY;
                 }
                 int day = temp.get(Calendar.DAY_OF_MONTH);
                 days[i] = new JCalendarDay(day, color, isExcluded);
@@ -406,7 +406,7 @@ public class JCalendar {
 
                 cal2.setTime(newList1.getLaunchDate());
 
-                if ((day.getDay() == cal2.get(Calendar.DAY_OF_MONTH))&&(day.getColor()!=Color.GREEN)){
+                if ((day.getDay() == cal2.get(Calendar.DAY_OF_MONTH))&&(day.getColor()!=Color.GRAY)){
 
                     if (newList1.getCount() > 10) {
                         Color color = Color.RED;
@@ -420,13 +420,8 @@ public class JCalendar {
                         break;
                     }
 
-                    if (newList1.getCount() > 2) {
-                        Color color = Color.GRAY;
-                        day.setColor(color);
-                        break;
-                    }
                     if (newList1.getCount() > 0) {
-                        Color color = Color.LIGHT_GRAY;
+                        Color color = Color.GREEN;
                         day.setColor(color);
                         break;
                     }

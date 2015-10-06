@@ -5,6 +5,7 @@
  */
 package scrappertool.crawlers;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -76,7 +77,16 @@ public class MuncheyeThread implements Callable<String> {
              }
             else {
                 System.out.println("without prox");
-            urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                try {
+                    urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                } catch (Exception e) {
+                    try {
+                         System.out.println("2nd time");
+                        urlResponse = objFetchSource.fetchsourceWithoutProxy(urlPage);
+                    } catch (IOException iOException) {
+                    }
+                }
+            
             }         
             
             objDocument = Jsoup.parse(urlResponse);

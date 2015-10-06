@@ -53,8 +53,12 @@ public class LaunchDataDaoImpl implements LaunchDataDao {
     @Override
     public List<LaunchData> listLaunchData() {
         String SQL = "select * from launch_data";
-        List<LaunchData> listLaunchData = jdbcTemplateObject.query(SQL,
-                new BeanPropertyRowMapper(LaunchData.class));
+        List<LaunchData> listLaunchData = null;
+        try {
+            listLaunchData = jdbcTemplateObject.query(SQL,
+                    new BeanPropertyRowMapper(LaunchData.class));
+        } catch (DataAccessException dataAccessException) {
+        }
         return listLaunchData;
     }
 
@@ -110,10 +114,17 @@ public class LaunchDataDaoImpl implements LaunchDataDao {
     }
     
     
-    @Override
+   @Override
     public List<DateCount> listLaunchDatas(){
         String SQL = "SELECT count( * ) , `LAUNCH_DATE` FROM `launch_data` GROUP BY `LAUNCH_DATE` ORDER BY count( * ) DESC";
-        List<DateCount> listDateCount = jdbcTemplateObject.query(SQL,new DateCountRowMapper());
+        List<DateCount> listDateCount = null;
+        try {
+            listDateCount = jdbcTemplateObject.query(SQL, new DateCountRowMapper());
+        } catch (DataAccessException dataAccessException) {
+            createTable();
+            listDateCount = jdbcTemplateObject.query(SQL, new DateCountRowMapper());
+                    
+        }
         return listDateCount;
     }
     
