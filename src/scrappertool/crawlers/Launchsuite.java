@@ -120,13 +120,13 @@ public class Launchsuite {
             objLaunchData.setClicks(clicks);
             objLaunchDataDao.insertLaunchData(objLaunchData);
 
-            loggerArea.append("\nProduct            ----------> : " + objLaunchData.getProduct().trim());
-            loggerArea.append("\nVendor            ----------> : " + objLaunchData.getVendor().trim());
-            loggerArea.append("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
-            loggerArea.append("\nNiche             ----------> : " + objLaunchData.getNiche().trim());
-            loggerArea.append("\nAffiliateNetwork  ----------> : " + objLaunchData.getAffiliateNetwork().trim());
-            loggerArea.append("\nDescription       ----------> : " + objLaunchData.getDescription().trim());
-            loggerArea.append("\nPromotionType     ----------> : " + objLaunchData.getPromotionType().trim());
+            loggerArea.append("\nProduct\t\t----------> :\t" + objLaunchData.getProduct().trim());
+            loggerArea.append("\nVendor\t\t----------> :\t" + objLaunchData.getVendor().trim());
+            loggerArea.append("\nLaunchDate\t----------> :\t" + objLaunchData.getLaunchDate());
+            loggerArea.append("\nNiche\t\t----------> :\t" + objLaunchData.getNiche().trim());
+            loggerArea.append("\nAffiliateNetwork\t----------> :\t" + objLaunchData.getAffiliateNetwork().trim());
+            loggerArea.append("\nDescription\t----------> :\t" + objLaunchData.getDescription().trim());
+            loggerArea.append("\nPromotionType\t----------> :\t" + objLaunchData.getPromotionType().trim());
             loggerArea.append("\n");
             System.out.println("======================================");
 

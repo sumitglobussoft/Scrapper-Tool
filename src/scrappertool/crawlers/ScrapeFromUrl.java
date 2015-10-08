@@ -47,7 +47,7 @@ public class ScrapeFromUrl {
         try {
             List<Future<String>> list = new ArrayList<Future<String>>();
             
-
+            ///to call  MuncheyeMainThread 
             ExecutorService executor1 = Executors.newFixedThreadPool(1);
             Callable worker1 = new MuncheyeMainThread(urlMuncheye, objLaunchDataDao, proxyList, objFetchSource);
 
@@ -58,6 +58,7 @@ public class ScrapeFromUrl {
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            /// to call JvnotifyproMainThread
             ExecutorService executor2 = Executors.newFixedThreadPool(1);
             Callable worker2 = new JvnotifyproMainThread(urlJvnotifypro, objLaunchDataDao, proxyList, objFetchSource);
 
@@ -68,6 +69,8 @@ public class ScrapeFromUrl {
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            //to call LaunchsuitMainThread
+            
             ExecutorService executor3 = Executors.newFixedThreadPool(1);
             Callable worker3 = new LaunchsuitMainThread(urlLaunchsuite, objLaunchDataDao, proxyList, objFetchSource);
 
@@ -396,13 +399,13 @@ class JvnotifyproMainThread implements Callable<String> {
                 listLaunchData.add(objLaunchData);
 
 //                System.out.println("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
-                loggerArea.append("\nProduct           ----------> : " + objLaunchData.getProduct().trim());
-                loggerArea.append("\nVendor            ----------> : " + objLaunchData.getVendor().trim());
-                loggerArea.append("\nLaunchDate        ----------> : " + objLaunchData.getLaunchDate());
-                loggerArea.append("\nNiche             ----------> : " + objLaunchData.getNiche().trim());
-                loggerArea.append("\nAffiliateNetwork  ----------> : " + objLaunchData.getAffiliateNetwork().trim());
-                loggerArea.append("\nDescription       ----------> : " + objLaunchData.getDescription().trim());
-                loggerArea.append("\nPromotionType     ----------> : " + objLaunchData.getPromotionType().trim());
+                loggerArea.append("\nProduct\t\t----------> :\t" + objLaunchData.getProduct().trim());
+                loggerArea.append("\nVendor\t\t----------> :\t" + objLaunchData.getVendor().trim());
+                loggerArea.append("\nLaunchDate\t----------> :\t" + objLaunchData.getLaunchDate());
+                loggerArea.append("\nNiche\t\t----------> :\t" + objLaunchData.getNiche().trim());
+                loggerArea.append("\nAffiliateNetwork\t----------> :\t" + objLaunchData.getAffiliateNetwork().trim());
+                loggerArea.append("\nDescription\t----------> :\t" + objLaunchData.getDescription().trim());
+                loggerArea.append("\nPromotionType\t----------> :\t" + objLaunchData.getPromotionType().trim());
                 loggerArea.append("\n");
             }
 

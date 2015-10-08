@@ -28,6 +28,7 @@ import scrappertool.dao.LaunchDataDao;
 import scrappertool.dao.LaunchDataDaoImpl;
 import scrappertool.entity.LaunchData;
 import scrappertool.entity.ProxyImport;
+import scrappertool.utility.InternetConnection;
 
 /**
  *
@@ -179,7 +180,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loggerArea, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
+                        .addComponent(loggerArea, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -194,16 +195,20 @@ public class MainPage extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshDBActionPerformed
         // TODO add your handling code here:
+        
+        
+        if (InternetConnection.testConnection()==200) {
+            
+       
         int a = JOptionPane.showConfirmDialog(null, "Do you really want to Refresh all the Data in the Database????", "REFRESH DATA", 0);
         System.out.println(a);
 
@@ -244,6 +249,12 @@ public class MainPage extends javax.swing.JFrame {
             }
 
         }
+        
+         } else {
+            
+            loggerArea.append("\nPlease Check your internet connection!!");
+        }
+        
     }//GEN-LAST:event_refreshDBActionPerformed
 
     private void calendarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calendarButtonActionPerformed
@@ -341,6 +352,8 @@ public class MainPage extends javax.swing.JFrame {
         } else {
             withoutProxyRadio.setSelected(true);
             withProxyRadio.setSelected(false);
+            calendarButton.setEnabled(true);
+            refreshDB.setEnabled(true);
             loggerArea.append("\n\nPlease Import a Valid .txt file!!");
             loggerArea.append("\nProxy in the file must be in the following format!!");
             loggerArea.append("\nProxyIP:ProxyPort:ProxyUsername:ProxyPassword");

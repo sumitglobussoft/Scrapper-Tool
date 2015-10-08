@@ -384,6 +384,7 @@ public class JCalendar {
             temp.add(Calendar.DAY_OF_MONTH, 1);
         }
 
+        //in listLaunchDatas count on each date is fetched 
         List<DateCount> listLaunchDatas = objLaunchDataDao.listLaunchDatas();
         List<DateCount> newList = new ArrayList<>();
         Calendar temp2 = (Calendar) calendar.clone();
