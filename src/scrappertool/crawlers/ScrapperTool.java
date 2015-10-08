@@ -5,34 +5,23 @@
  */
 package scrappertool.crawlers;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import scrappertool.dao.LaunchDataDao;
-import scrappertool.dao.LaunchDataDaoImpl;
-import scrappertool.entity.DateCount;
-import scrappertool.utility.FetchSource;
-
 /**
  *
  * @author Mendon Ashwini
+ * this is just a testing class
  */
 public class ScrapperTool {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-
-        ApplicationContext context
-                = new ClassPathXmlApplicationContext("Beans.xml");
-
-        LaunchDataDao objLaunchDataDao
-                = (LaunchDataDaoImpl) context.getBean("LaunchDataDaoImpl");
+//    public static void main(String[] args) {
+//
+//        ApplicationContext context
+//                = new ClassPathXmlApplicationContext("Beans.xml");
+//
+//        LaunchDataDao objLaunchDataDao
+//                = (LaunchDataDaoImpl) context.getBean("LaunchDataDaoImpl");
         
 //objLaunchDataDao.createTable();
 //        ScrapeFromUrl o=new ScrapeFromUrl();
@@ -48,6 +37,6 @@ public class ScrapperTool {
 //        }
         
 
-    }
+//    }
 
 }

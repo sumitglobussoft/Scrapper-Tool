@@ -7,7 +7,8 @@ package scrappertool.calender;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * Its the layout where the calender is implemented
  */
 
  

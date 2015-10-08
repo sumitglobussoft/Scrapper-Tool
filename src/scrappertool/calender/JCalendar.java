@@ -7,7 +7,8 @@ package scrappertool.calender;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * This class defines our Calender. And how the colors in it are defined
  */
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -87,6 +87,9 @@ public class ScrapeFromUrl {
                     ep.printStackTrace();
                 }
             }
+             executor1.shutdown();
+             executor2.shutdown();
+             executor3.shutdown();
 
 
 //            getMuncheyeLaunch(urlMuncheye, objLaunchDataDao, proxyList);
@@ -168,7 +171,7 @@ class MuncheyeMainThread implements Callable<String> {
             }
             objDocument = Jsoup.parse(urlResponse);
 
-            Elements e = objDocument.select("div[id=right-column] div[class=item_info] a");
+            Elements e = objDocument.select("div[id=right-column] div[class*=item_info] a");
             System.out.println("" + e.size());
 
             for (Element e1 : e) {
@@ -376,8 +379,8 @@ class JvnotifyproMainThread implements Callable<String> {
                 }
 
                 objLaunchData.setPromotionType(promotionType);
-                objLaunchData.setVendor(vendor);
-                objLaunchData.setProduct(product);
+                objLaunchData.setVendor(vendor.trim());
+                objLaunchData.setProduct(product.trim());
                 objLaunchData.setLaunchDate(launchDate);
                 objLaunchData.setLaunchTime(launchTime);
                 objLaunchData.setFrontendPrice(frontEndPrice);

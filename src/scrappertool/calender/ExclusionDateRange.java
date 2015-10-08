@@ -7,7 +7,8 @@ package scrappertool.calender;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * This class is used incase any date has to be excluded. At present It is not used
  */
 
  

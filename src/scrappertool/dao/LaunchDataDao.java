@@ -14,7 +14,8 @@ import scrappertool.entity.LaunchData;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * Interface where all the database operation methods are declared 
  */
 public interface LaunchDataDao {
    /** 

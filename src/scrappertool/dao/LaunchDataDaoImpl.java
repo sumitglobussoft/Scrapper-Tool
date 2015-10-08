@@ -19,7 +19,8 @@ import scrappertool.entity.LaunchData;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * All the methods from interface LaunchDataDao are implemented in this class
  */
 public class LaunchDataDaoImpl implements LaunchDataDao {
 

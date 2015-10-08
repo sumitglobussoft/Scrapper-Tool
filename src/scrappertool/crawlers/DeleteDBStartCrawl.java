@@ -17,7 +17,7 @@ import static scrappertool.ui.MainPage.withoutProxyRadio;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
  */
 public class DeleteDBStartCrawl implements Callable<String> {
 

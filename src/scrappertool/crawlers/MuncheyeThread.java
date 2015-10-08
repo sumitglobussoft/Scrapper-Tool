@@ -6,10 +6,7 @@
 package scrappertool.crawlers;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,8 +113,9 @@ public class MuncheyeThread implements Callable<String> {
                 launchDateString = e.get(2).select("td").last().text();
                 System.out.println("launchDate:" + launchDateString);
                 System.out.println("coverting to data form");
-                DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
-                launchDate = new SimpleDateFormat("yyyy-MM-dd").format(format.parse(launchDateString));
+//                DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
+//                launchDate = new SimpleDateFormat("yyyy-MM-dd").format(format.parse(launchDateString));
+                launchDate = launchDateString;
 
             } catch (Exception v1) {
             }
@@ -155,8 +153,8 @@ public class MuncheyeThread implements Callable<String> {
             
 
             objLaunchData.setPromotionType(promotionType);
-            objLaunchData.setVendor(vendor);
-            objLaunchData.setProduct(product);
+            objLaunchData.setVendor(vendor.trim());
+            objLaunchData.setProduct(product.trim());
             objLaunchData.setLaunchDate(launchDate);
             objLaunchData.setLaunchTime(launchTime);
             objLaunchData.setFrontendPrice(frontEndPrice);

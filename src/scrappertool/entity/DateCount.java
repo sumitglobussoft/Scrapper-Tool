@@ -5,12 +5,13 @@
  */
 package scrappertool.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * this class is used for mapping the result from a sql query which returns the date 
+ * and the count of lauches for that day
  */
 public class DateCount{
 

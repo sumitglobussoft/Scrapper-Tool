@@ -6,15 +6,10 @@
 package scrappertool.utility;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -44,6 +39,8 @@ import scrappertool.entity.ProxyImport;
 /**
  *
  * @author Mendon Ashwini
+ * It has all the methods to fetch the response
+ * i.e with and without proxy. both get and post request
  */
 public class FetchSource {
 

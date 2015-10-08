@@ -18,7 +18,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * It maps the sql resultset data to the DateCount class
  */
 public class DateCountRowMapper implements RowMapper{
 

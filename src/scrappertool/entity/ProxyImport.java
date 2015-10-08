@@ -7,7 +7,9 @@ package scrappertool.entity;
 
 /**
  *
- * @author GLB-130
+ * @author Mendon Ashwini
+ * In this class all the proxies are set either with username and password or without
+ * It is private proxy or public proxy can be noted with the proxyLen
  */
 public class ProxyImport {
 
