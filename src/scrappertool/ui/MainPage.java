@@ -5,9 +5,13 @@
  */
 package scrappertool.ui;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import scrappertool.calender.JCalendarDialog;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +36,7 @@ import scrappertool.utility.InternetConnection;
 
 /**
  *
- * @author Mendon Ashwini
- * Main UI from where the application starts
+ * @author Mendon Ashwini Main UI from where the application starts
  */
 public class MainPage extends javax.swing.JFrame {
 
@@ -72,6 +75,7 @@ public class MainPage extends javax.swing.JFrame {
         withProxyRadio = new javax.swing.JRadioButton();
         withoutProxyRadio = new javax.swing.JRadioButton();
         button1 = new java.awt.Button();
+        Exportcsv = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,7 +91,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("SCRAPPER TOOL");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/scrappertool/images/scrappertoolicon.jpg"))); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         calendarButton.setBackground(new java.awt.Color(0, 153, 255));
@@ -131,36 +135,47 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
+        Exportcsv.setBackground(new java.awt.Color(51, 153, 255));
+        Exportcsv.setText("Export CSV");
+        Exportcsv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportcsvActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(265, 265, 265)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)))
-                .addGap(276, 276, 276))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(loggerArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(calendarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(255, 255, 255)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)))
+                        .addGap(266, 266, 266))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(calendarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
-                        .addComponent(refreshDB, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(refreshDB, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Exportcsv, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
                         .addComponent(withProxyRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(withoutProxyRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(34, 34, 34)
+                        .addComponent(withoutProxyRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -172,18 +187,20 @@ public class MainPage extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(calendarButton, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(withoutProxyRadio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(refreshDB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(withoutProxyRadio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(withProxyRadio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loggerArea, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(button1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(Exportcsv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(loggerArea, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -204,18 +221,33 @@ public class MainPage extends javax.swing.JFrame {
 
     private void refreshDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshDBActionPerformed
         // TODO add your handling code here:
-        
-        
-        if (InternetConnection.testConnection()==200) {
-            
-       
-        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Refresh all the Data in the Database????", "REFRESH DATA", 0);
-        System.out.println(a);
 
-        if (a == 0) {
-            if (withProxyRadio.isSelected()) {
-                if (proxyList.size() > 0) {
+        if (InternetConnection.testConnection() == 200) {
 
+            int a = JOptionPane.showConfirmDialog(null, "Do you really want to Refresh all the Data in the Database????", "REFRESH DATA", 0);
+            System.out.println(a);
+
+            if (a == 0) {
+                if (withProxyRadio.isSelected()) {
+                    if (proxyList.size() > 0) {
+
+                        loggerArea.append("\nPlease Wait!!");
+                        withoutProxyRadio.setEnabled(false);
+                        withProxyRadio.setEnabled(false);
+                        calendarButton.setEnabled(false);
+                        refreshDB.setEnabled(false);
+                        ExecutorService executor = Executors.newFixedThreadPool(1);
+                        Callable worker = new DeleteDBStartCrawl(objLaunchDataDao, proxyList);
+
+                        try {
+                            executor.submit(worker);
+                        } catch (Exception ex) {
+                            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        loggerArea.append("\nPlease Load Proxy!!");
+                    }
+                } else {
                     loggerArea.append("\nPlease Wait!!");
                     withoutProxyRadio.setEnabled(false);
                     withProxyRadio.setEnabled(false);
@@ -229,32 +261,15 @@ public class MainPage extends javax.swing.JFrame {
                     } catch (Exception ex) {
                         Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
-                    loggerArea.append("\nPlease Load Proxy!!");
                 }
-            } else {
-                loggerArea.append("\nPlease Wait!!");
-                withoutProxyRadio.setEnabled(false);
-                withProxyRadio.setEnabled(false);
-                calendarButton.setEnabled(false);
-                refreshDB.setEnabled(false);
-                ExecutorService executor = Executors.newFixedThreadPool(1);
-                Callable worker = new DeleteDBStartCrawl(objLaunchDataDao, proxyList);
 
-                try {
-                    executor.submit(worker);
-                } catch (Exception ex) {
-                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
 
-        }
-        
-         } else {
-            
+        } else {
+
             loggerArea.append("\nPlease Check your internet connection!!");
         }
-        
+
     }//GEN-LAST:event_refreshDBActionPerformed
 
     private void calendarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calendarButtonActionPerformed
@@ -375,10 +390,25 @@ public class MainPage extends javax.swing.JFrame {
         loggerArea.setText("");
     }//GEN-LAST:event_button1ActionPerformed
 
+    private void ExportcsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportcsvActionPerformed
+        try {
+            // TODO add your handling code here:
+            List<LaunchData> listLaunchData = objLaunchDataDao.listLaunchData();
+            if ((listLaunchData != null) && (listLaunchData.size() > 0)) {
+                GenerateExcelFile.excel();
+            } else {
+                loggerArea.append("\nDatabase Is Empty. Please Click The Start Button");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_ExportcsvActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws URISyntaxException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -409,10 +439,23 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
     }
+
+    private static void open(URI uri) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException e) {
+
+            }
+        } else {
+        }
+    }
+
     //proxyList is a ArrayList which hold all the valid proxies
     public static ArrayList<ProxyImport> proxyList = new ArrayList();
     public int countOfProxy = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Exportcsv;
     private java.awt.Button button1;
     public static javax.swing.JButton calendarButton;
     private javax.swing.JLabel jLabel1;
